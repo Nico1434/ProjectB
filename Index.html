@@ -1,15 +1,580 @@
 <!DOCTYPE html>
-<html lang="en">
-  <head>
-    <title>行政院通過現金普發一萬元</title>    
-  </head>
-  <body>
-    <h1>存高利一表看 最高多賺10%利息</h1>
-       <img src="https://s.yimg.com/ny/api/res/1.2/VwXTzHymvVfhkMpQ3s7e0Q--/YXBwaWQ9aGlnaGxhbmRlcjt3PTk2MDtoPTY0MTtjZj13ZWJw/https://s.yimg.com/os/creatr-uploaded-images/2020-12/5a1d0c00-3f87-11eb-bf7e-0c90d95f362d">
-    <p>行政院通過現金普發一萬元，最快10月發放，民眾最關心的話題除了怎麼花，就是「放在哪裡能生利息」！《Yahoo股市》彙整國內各家銀行期限到年底的新台幣高利存款方案條件、額度一次看，精選6家銀行台幣活存都超過3%，最高更有10%高利，讓大家不怕外幣匯損，又能放心存，安心領利息。</p>
-    <h2>普發一萬存款最安心</h2>
-    <ul><a href="#"> <li>一、聯邦銀New New Bank新戶10%最高</li></a/>
-      </ul
-   
-  </body>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>3D 守宮飼養箱互動模型</title>
+    <style>
+        /* --- CSS 樣式區 --- */
+        :root {
+            --bg-color: #121212;
+            --panel-bg: #1e1e1e;
+            --text-main: #e0e0e0;
+            --text-dim: #a0a0a0;
+            --accent: #4caf50;
+            --accent-hover: #66bb6a;
+            --border: #333;
+        }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        
+        body {
+            font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-main);
+            height: 100vh;
+            display: flex;
+            overflow: hidden;
+        }
+
+        /* 通用元件 */
+        h2, h3 { margin-bottom: 1rem; font-weight: 500; letter-spacing: 1px; }
+        label { display: block; margin-bottom: 0.5rem; color: var(--text-dim); font-size: 0.9rem; }
+        
+        button {
+            background: var(--panel-bg);
+            border: 1px solid var(--border);
+            color: var(--text-main);
+            padding: 10px;
+            cursor: pointer;
+            border-radius: 4px;
+            transition: all 0.2s;
+            width: 100%;
+            margin-bottom: 8px;
+            text-align: left;
+            display: flex;
+            align-items: center;
+        }
+        button:hover { background: #2c2c2c; border-color: var(--accent); }
+        button.active { background: var(--accent); color: white; border-color: var(--accent); }
+        button i { margin-right: 10px; }
+
+        input[type="color"] {
+            width: 100%;
+            height: 35px;
+            border: none;
+            background: none;
+            cursor: pointer;
+        }
+
+        input[type="range"] {
+            width: 100%;
+            margin-bottom: 10px;
+        }
+
+        .panel {
+            width: 280px;
+            background-color: var(--panel-bg);
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            border-right: 1px solid var(--border);
+            overflow-y: auto;
+            z-index: 10;
+            box-shadow: 2px 0 10px rgba(0,0,0,0.3);
+        }
+
+        .right-panel {
+            border-right: none;
+            border-left: 1px solid var(--border);
+            box-shadow: -2px 0 10px rgba(0,0,0,0.3);
+        }
+
+        #main-viewport {
+            flex-grow: 1;
+            position: relative;
+            background: radial-gradient(circle at center, #2a2a2a 0%, #000000 100%);
+        }
+        
+        #canvas-container { width: 100%; height: 100%; display: block; }
+
+        .control-group {
+            margin-bottom: 20px;
+            padding-bottom: 20px;
+            border-bottom: 1px solid var(--border);
+        }
+        .control-group:last-child { border-bottom: none; }
+
+        /* 模式切換按鈕群組 */
+        .mode-toggle { display: flex; gap: 5px; margin-bottom: 15px; }
+        .mode-toggle button { text-align: center; justify-content: center; margin-bottom: 0; }
+
+        .hint {
+            font-size: 0.8rem;
+            color: var(--text-dim);
+            margin-top: 10px;
+            line-height: 1.4;
+            background: #2a2a2a;
+            padding: 10px;
+            border-radius: 4px;
+        }
+    </style>
+    <script type="importmap">
+        {
+            "imports": {
+                "three": "https://unpkg.com/three@0.160.0/build/three.module.js",
+                "three/addons/": "https://unpkg.com/three@0.160.0/examples/jsm/"
+            }
+        }
+    </script>
+</head>
+<body>
+
+    <div class="panel left-panel">
+        <h2>物件選單</h2>
+        <div class="control-group">
+            <h3>生物</h3>
+            <button id="add-gecko">🦎 新增守宮</button>
+        </div>
+        <div class="control-group">
+            <h3>環境佈景</h3>
+            <button id="add-rock">🪨 新增造景石</button>
+            <button id="add-plant">🌿 新增植物</button>
+            <button id="add-cave">🏠 新增躲避屋</button>
+            <button id="add-bowl">🥣 新增水盆</button>
+        </div>
+        <div class="hint">
+            <strong>操作說明：</strong><br>
+            • 左鍵點擊物件：選取<br>
+            • 左鍵拖曳：旋轉視角<br>
+            • 右鍵拖曳：平移視角<br>
+            • 滾輪：縮放視角
+        </div>
+    </div>
+
+    <div id="main-viewport">
+        <canvas id="canvas-container"></canvas>
+    </div>
+
+    <div class="panel right-panel">
+        <h2>編輯面板</h2>
+        
+        <div id="no-selection" style="display: block; color: var(--text-dim); text-align: center; margin-top: 50px;">
+            請點擊畫面中的物件<br>進行編輯
+        </div>
+
+        <div id="edit-controls" style="display: none;">
+            <div class="control-group">
+                <h3>操作模式</h3>
+                <div class="mode-toggle">
+                    <button id="mode-translate" class="active" title="移動 (Translate)">移動</button>
+                    <button id="mode-rotate" title="旋轉 (Rotate)">旋轉</button>
+                    <button id="mode-scale" title="縮放 (Scale)">縮放</button>
+                </div>
+            </div>
+
+            <div class="control-group">
+                <h3>外觀設定</h3>
+                <label>顏色</label>
+                <input type="color" id="obj-color" value="#ffffff">
+            </div>
+
+            <div class="control-group">
+                <h3>功能</h3>
+                <button id="delete-obj" style="border-color: #ff5252; color: #ff5252;">🗑️ 刪除物件</button>
+            </div>
+        </div>
+    </div>
+
+    <script type="module">
+        import * as THREE from 'three';
+        import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
+        import { TransformControls } from 'three/addons/controls/TransformControls.js';
+
+        // 全域變數
+        let scene, camera, renderer;
+        let orbitControls, transformControls;
+        let raycaster, mouse;
+        let selectedObject = null;
+        const objects = []; // 存放所有可互動的物件
+
+        // DOM 元素
+        const editPanel = document.getElementById('edit-controls');
+        const noSelectionMsg = document.getElementById('no-selection');
+        const colorInput = document.getElementById('obj-color');
+
+        init();
+        animate();
+
+        function init() {
+            // 1. 場景設定
+            const container = document.getElementById('main-viewport');
+            scene = new THREE.Scene();
+            
+            // 2. 相機設定
+            camera = new THREE.PerspectiveCamera(45, container.offsetWidth / container.offsetHeight, 0.1, 1000);
+            camera.position.set(20, 15, 30);
+            camera.lookAt(0, 0, 0);
+
+            // 3. 渲染器設定
+            renderer = new THREE.WebGLRenderer({ canvas: document.getElementById('canvas-container'), antialias: true, alpha: true });
+            renderer.setSize(container.offsetWidth, container.offsetHeight);
+            renderer.shadowMap.enabled = true;
+            renderer.shadowMap.type = THREE.PCFSoftShadowMap;
+
+            // 4. 燈光
+            const ambientLight = new THREE.AmbientLight(0x404040, 1.5); // 柔和環境光
+            scene.add(ambientLight);
+
+            const dirLight = new THREE.DirectionalLight(0xffffff, 2);
+            dirLight.position.set(10, 20, 10);
+            dirLight.castShadow = true;
+            dirLight.shadow.mapSize.width = 2048;
+            dirLight.shadow.mapSize.height = 2048;
+            scene.add(dirLight);
+
+            // 5. 建立飼養箱 (玻璃箱)
+            createTerrarium();
+
+            // 6. 控制器
+            orbitControls = new OrbitControls(camera, renderer.domElement);
+            orbitControls.enableDamping = true;
+            
+            transformControls = new TransformControls(camera, renderer.domElement);
+            transformControls.addEventListener('dragging-changed', function (event) {
+                orbitControls.enabled = !event.value; // 拖曳物件時禁用視角轉動
+            });
+            transformControls.addEventListener('change', () => {
+                // 當物件被變換時，如果需要更新數值面板可以在這裡寫
+            });
+            scene.add(transformControls);
+
+            // 7. 互動事件 (Raycaster)
+            raycaster = new THREE.Raycaster();
+            mouse = new THREE.Vector2();
+            
+            renderer.domElement.addEventListener('pointerdown', onPointerDown);
+            window.addEventListener('resize', onWindowResize);
+
+            // UI 事件綁定
+            setupUIEvents();
+        }
+
+        function createTerrarium() {
+            // 地板
+            const floorGeometry = new THREE.PlaneGeometry(30, 20);
+            const floorMaterial = new THREE.MeshStandardMaterial({ 
+                color: 0x3e2723, // 土壤色
+                roughness: 0.9 
+            });
+            const floor = new THREE.Mesh(floorGeometry, floorMaterial);
+            floor.rotation.x = -Math.PI / 2;
+            floor.receiveShadow = true;
+            floor.name = "Floor";
+            scene.add(floor);
+
+            // 玻璃牆 (透明盒)
+            const glassGeometry = new THREE.BoxGeometry(30, 15, 20);
+            const glassMaterial = new THREE.MeshPhysicalMaterial({
+                color: 0xffffff,
+                transparent: true,
+                opacity: 0.1,
+                roughness: 0,
+                metalness: 0.1,
+                side: THREE.BackSide // 讓內部可見
+            });
+            const glassBox = new THREE.Mesh(glassGeometry, glassMaterial);
+            glassBox.position.y = 7.5;
+            scene.add(glassBox);
+
+            // 邊框 (裝飾用)
+            const edges = new THREE.EdgesGeometry(glassGeometry);
+            const line = new THREE.LineSegments(edges, new THREE.LineBasicMaterial({ color: 0x000000 }));
+            line.position.y = 7.5;
+            scene.add(line);
+        }
+
+        // --- 物件生成工廠 ---
+
+        // 生成隨機顏色
+        const randomColor = () => Math.random() * 0xffffff;
+
+        function createGecko() {
+            const group = new THREE.Group();
+
+            const material = new THREE.MeshStandardMaterial({ color: 0xffab91, roughness: 0.4 }); // 守宮膚色
+
+            // 身體
+            const bodyGeo = new THREE.CapsuleGeometry(0.8, 3, 4, 8);
+            const body = new THREE.Mesh(bodyGeo, material);
+            body.rotation.x = Math.PI / 2;
+            body.castShadow = true;
+            group.add(body);
+
+            // 頭
+            const headGeo = new THREE.SphereGeometry(1, 16, 16);
+            const head = new THREE.Mesh(headGeo, material);
+            head.position.z = -2;
+            head.scale.set(1, 0.6, 1);
+            head.castShadow = true;
+            group.add(head);
+
+            // 眼睛
+            const eyeGeo = new THREE.SphereGeometry(0.2);
+            const eyeMat = new THREE.MeshStandardMaterial({ color: 0x000000 });
+            const leftEye = new THREE.Mesh(eyeGeo, eyeMat);
+            leftEye.position.set(0.6, 0.3, -2.2);
+            const rightEye = new THREE.Mesh(eyeGeo, eyeMat);
+            rightEye.position.set(-0.6, 0.3, -2.2);
+            group.add(leftEye);
+            group.add(rightEye);
+
+            // 尾巴
+            const tailGeo = new THREE.ConeGeometry(0.5, 4, 8);
+            const tail = new THREE.Mesh(tailGeo, material);
+            tail.rotation.x = -Math.PI / 2;
+            tail.position.z = 3.5;
+            tail.castShadow = true;
+            group.add(tail);
+
+            // 簡單的四肢 (用小膠囊代表)
+            const legGeo = new THREE.CapsuleGeometry(0.3, 1);
+            const legPositions = [
+                {x: 1, z: -1}, {x: -1, z: -1},
+                {x: 1, z: 1.5}, {x: -1, z: 1.5}
+            ];
+            legPositions.forEach(pos => {
+                const leg = new THREE.Mesh(legGeo, material);
+                leg.position.set(pos.x, -0.2, pos.z);
+                leg.rotation.z = Math.PI / 2;
+                leg.rotation.y = (pos.x > 0 ? -1 : 1) * 0.5;
+                group.add(leg);
+            });
+
+            group.userData = { type: 'gecko', isEditable: true };
+            spawnObject(group);
+        }
+
+        function createRock() {
+            // 使用十二面體模擬石頭
+            const geometry = new THREE.DodecahedronGeometry(Math.random() * 1 + 1, 0);
+            const material = new THREE.MeshStandardMaterial({ color: 0x8d6e63, flatShading: true });
+            const mesh = new THREE.Mesh(geometry, material);
+            
+            // 隨機變形
+            mesh.scale.set(1 + Math.random(), 0.8, 1 + Math.random());
+            mesh.castShadow = true;
+            mesh.receiveShadow = true;
+            mesh.userData = { type: 'rock', isEditable: true };
+            spawnObject(mesh);
+        }
+
+        function createPlant() {
+            const group = new THREE.Group();
+            // 莖
+            const stemGeo = new THREE.CylinderGeometry(0.1, 0.1, 1);
+            const greenMat = new THREE.MeshStandardMaterial({ color: 0x66bb6a });
+            const stem = new THREE.Mesh(stemGeo, greenMat);
+            stem.position.y = 0.5;
+            group.add(stem);
+
+            // 葉子 (用幾個壓扁的球體)
+            for(let i=0; i<5; i++) {
+                const leafGeo = new THREE.SphereGeometry(0.4, 8, 8);
+                const leaf = new THREE.Mesh(leafGeo, greenMat);
+                leaf.position.y = 0.8 + Math.random() * 0.5;
+                leaf.position.x = (Math.random() - 0.5) * 1.5;
+                leaf.position.z = (Math.random() - 0.5) * 1.5;
+                leaf.scale.y = 0.1;
+                leaf.rotation.x = Math.random();
+                leaf.rotation.z = Math.random();
+                group.add(leaf);
+            }
+
+            group.userData = { type: 'plant', isEditable: true };
+            spawnObject(group);
+        }
+
+        function createCave() {
+            // 躲避屋：切半的球體
+            const geometry = new THREE.SphereGeometry(3, 16, 16, 0, Math.PI * 2, 0, Math.PI / 2);
+            const material = new THREE.MeshStandardMaterial({ color: 0x5d4037, side: THREE.DoubleSide });
+            const cave = new THREE.Mesh(geometry, material);
+            cave.castShadow = true;
+            
+            // 入口 (簡單用另一個黑洞蓋上去，或者只是視覺上的形狀)
+            // 這裡簡化為一個半球體外殼
+            
+            cave.userData = { type: 'cave', isEditable: true };
+            spawnObject(cave);
+        }
+
+        function createBowl() {
+            const geometry = new THREE.CylinderGeometry(1.5, 1.2, 0.5, 16);
+            const material = new THREE.MeshStandardMaterial({ color: 0xffcc80 });
+            const bowl = new THREE.Mesh(geometry, material);
+            
+            // 水面
+            const waterGeo = new THREE.CircleGeometry(1.1, 16);
+            const waterMat = new THREE.MeshStandardMaterial({ color: 0x4fc3f7 });
+            const water = new THREE.Mesh(waterGeo, waterMat);
+            water.rotation.x = -Math.PI / 2;
+            water.position.y = 0.26;
+            bowl.add(water);
+
+            bowl.castShadow = true;
+            bowl.userData = { type: 'bowl', isEditable: true };
+            spawnObject(bowl);
+        }
+
+        // 通用生成函數
+        function spawnObject(obj) {
+            // 預設位置在中心上方
+            obj.position.set((Math.random()-0.5)*5, 0.5, (Math.random()-0.5)*5);
+            
+            // 如果是群組，需要遍歷子物件賦予材質參考，以便後續變色
+            // 如果是單一 Mesh，直接就可以變色
+            
+            scene.add(obj);
+            objects.push(obj);
+            
+            // 自動選取剛生成的物件
+            selectObject(obj);
+        }
+
+        // --- 互動邏輯 ---
+
+        function onPointerDown(event) {
+            // 計算滑鼠位置
+            const rect = renderer.domElement.getBoundingClientRect();
+            mouse.x = ((event.clientX - rect.left) / rect.width) * 2 - 1;
+            mouse.y = -((event.clientY - rect.top) / rect.height) * 2 + 1;
+
+            raycaster.setFromCamera(mouse, camera);
+            
+            // 檢測與 objects 陣列的交集 (遞迴檢查子物件)
+            const intersects = raycaster.intersectObjects(objects, true);
+
+            if (intersects.length > 0) {
+                // 找到最上層的父物件 (因為可能是 Group 的一部分)
+                let target = intersects[0].object;
+                while(target.parent && target.parent !== scene && !objects.includes(target)) {
+                    target = target.parent;
+                }
+                
+                // 如果點擊的是我們定義的可編輯物件
+                if (objects.includes(target)) {
+                    selectObject(target);
+                    return;
+                }
+            }
+
+            // 如果點擊空白處，取消選取
+            deselectObject();
+        }
+
+        function selectObject(obj) {
+            selectedObject = obj;
+            transformControls.attach(obj);
+            
+            // 更新 UI 顯示
+            noSelectionMsg.style.display = 'none';
+            editPanel.style.display = 'block';
+            
+            // 嘗試抓取顏色並更新 input (只抓第一個 Mesh 的顏色)
+            let mesh = obj;
+            if (obj.isGroup) {
+                obj.traverse((child) => {
+                    if (child.isMesh && !mesh.isMesh) mesh = child;
+                });
+            }
+            if (mesh.material && mesh.material.color) {
+                colorInput.value = '#' + mesh.material.color.getHexString();
+            }
+        }
+
+        function deselectObject() {
+            selectedObject = null;
+            transformControls.detach();
+            noSelectionMsg.style.display = 'block';
+            editPanel.style.display = 'none';
+        }
+
+        function deleteSelected() {
+            if (!selectedObject) return;
+            
+            scene.remove(selectedObject);
+            transformControls.detach();
+            
+            // 從陣列中移除
+            const index = objects.indexOf(selectedObject);
+            if (index > -1) objects.splice(index, 1);
+            
+            deselectObject();
+        }
+
+        function updateObjectColor(hexColor) {
+            if (!selectedObject) return;
+            
+            const color = new THREE.Color(hexColor);
+            
+            if (selectedObject.isGroup) {
+                selectedObject.traverse((child) => {
+                    if (child.isMesh && child.name !== 'Eye') { // 避免把眼睛也變色
+                         child.material.color.set(color);
+                    }
+                });
+            } else if (selectedObject.material) {
+                selectedObject.material.color.set(color);
+            }
+        }
+
+        // --- UI 事件處理 ---
+        function setupUIEvents() {
+            // 產生按鈕
+            document.getElementById('add-gecko').addEventListener('click', createGecko);
+            document.getElementById('add-rock').addEventListener('click', createRock);
+            document.getElementById('add-plant').addEventListener('click', createPlant);
+            document.getElementById('add-cave').addEventListener('click', createCave);
+            document.getElementById('add-bowl').addEventListener('click', createBowl);
+
+            // 模式切換
+            const modes = {
+                'mode-translate': 'translate',
+                'mode-rotate': 'rotate',
+                'mode-scale': 'scale'
+            };
+            
+            for (const [id, mode] of Object.entries(modes)) {
+                document.getElementById(id).addEventListener('click', (e) => {
+                    transformControls.setMode(mode);
+                    // 更新按鈕樣式
+                    document.querySelectorAll('.mode-toggle button').forEach(b => b.classList.remove('active'));
+                    e.target.classList.add('active');
+                });
+            }
+
+            // 顏色修改
+            colorInput.addEventListener('input', (e) => {
+                updateObjectColor(e.target.value);
+            });
+
+            // 刪除
+            document.getElementById('delete-obj').addEventListener('click', deleteSelected);
+            
+            // 鍵盤快捷鍵
+            window.addEventListener('keydown', function(event) {
+                switch (event.key) {
+                    case 'Delete': // Delete鍵刪除
+                    case 'Backspace':
+                        deleteSelected();
+                        break;
+                }
+            });
+        }
+
+        function onWindowResize() {
+            const container = document.getElementById('main-viewport');
+            camera.aspect = container.offsetWidth / container.offsetHeight;
+            camera.updateProjectionMatrix();
+            renderer.setSize(container.offsetWidth, container.offsetHeight);
+        }
+
+        function animate() {
+            requestAnimationFrame(animate);
+            orbitControls.update();
+            renderer.render(scene, camera);
+        }
+    </script>
+</body>
 </html>
