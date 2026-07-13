@@ -3,175 +3,285 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>新品上市 | 海蘆筍 - 大海的綠寶石</title>
+    <title> 茹媽鳳農六區 - 產地直送的健康好味</title>
     <style>
-        :root {
-            --primary-color: #1a5d5c;
-            --secondary-color: #f0f7f4;
-            --accent-color: #e67e22;
-            --text-color: #333;
+        /* 基礎設定 */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: '微軟正黑體', 'PingFang TC', sans-serif;
+            scroll-behavior: smooth;
         }
         body {
-            font-family: "Microsoft JhengHei", sans-serif;
+            background-color: #f9f9f6;
+            color: #333;
             line-height: 1.6;
-            color: var(--text-color);
-            background-color: #f9f9f9;
-            margin: 0;
-            padding: 20px;
         }
-        .container {
-            max-width: 800px;
-            margin: auto;
-            background: white;
-            padding: 40px;
-            box-shadow: 0 0 20px rgba(0,0,0,0.1);
-            border-radius: 8px;
-        }
-        .header {
-            text-align: center;
-            border-bottom: 2px solid var(--primary-color);
-            margin-bottom: 30px;
-            padding-bottom: 20px;
-        }
-        .header h1 {
-            color: var(--primary-color);
-            font-size: 2.5em;
-            margin: 0;
-        }
-        .header p {
-            font-size: 1.2em;
-            color: #666;
-            margin-top: 10px;
-        }
-        .main-content {
-            display: grid;
-            grid-template-columns: 1fr 1.5fr;
-            gap: 30px;
-            margin-bottom: 30px;
-        }
-        .product-img {
+        
+        /* 導覽列 */
+        header {
+            background-color: #2e7d32; /* 鳳農綠 */
+            color: white;
+            padding: 15px 20px;
+            position: fixed;
             width: 100%;
-            border-radius: 8px;
-        }
-        h2 {
-            color: var(--primary-color);
-            border-left: 5px solid var(--primary-color);
-            padding-left: 10px;
-            font-size: 1.4em;
-        }
-        .benefit-item {
-            margin-bottom: 15px;
+            top: 0;
+            z-index: 1000;
             display: flex;
-            align-items: flex-start;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
         }
-        .icon {
-            margin-right: 10px;
-            font-size: 1.2em;
+        .logo {
+            font-size: 24px;
+            font-weight: bold;
+            letter-spacing: 2px;
         }
-        .cooking-section {
-            background-color: var(--secondary-color);
-            padding: 20px;
-            border-radius: 8px;
-        }
-        .tip-box {
-            background: #fff3cd;
-            padding: 15px;
-            border-radius: 5px;
-            border-left: 5px solid #ffeeba;
-            margin-bottom: 20px;
+        nav a {
+            color: white;
+            text-decoration: none;
+            margin-left: 20px;
             font-weight: bold;
         }
-        .recipe-grid {
+        nav a:hover {
+            color: #ffd54f;
+        }
+
+        /* 區塊共用設定 */
+        section {
+            padding: 80px 20px 40px;
+            max-width: 1000px;
+            margin: 0 auto;
+        }
+        h2 {
+            text-align: center;
+            color: #2e7d32;
+            margin-bottom: 30px;
+            font-size: 32px;
+            border-bottom: 3px solid #ffd54f;
+            display: inline-block;
+            padding-bottom: 5px;
+        }
+        .section-title-wrapper {
+            text-align: center;
+        }
+
+        /* 首頁橫幅 (Hero Section) */
+        #hero {
+            background-color: #e8f5e9;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            padding-top: 60px; /* 避開 navbar */
+        }
+        #hero h1 {
+            font-size: 48px;
+            color: #1b5e20;
+            margin-bottom: 20px;
+        }
+        #hero p {
+            font-size: 20px;
+            color: #555;
+            margin-bottom: 30px;
+        }
+        .cta-btn {
+            background-color: #d32f2f; /* 阿茹圍裙的紅色 */
+            color: white;
+            padding: 15px 30px;
+            font-size: 20px;
+            text-decoration: none;
+            border-radius: 30px;
+            font-weight: bold;
+            transition: background 0.3s;
+        }
+        .cta-btn:hover {
+            background-color: #b71c1c;
+        }
+
+        /* 關於我們 */
+        #about p {
+            font-size: 18px;
+            text-align: center;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        /* 嚴選商品 (卡片排版) */
+        .product-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 20px;
-        }
-        .recipe-card {
-            background: white;
-            padding: 15px;
-            border-radius: 5px;
-            border: 1px solid #ddd;
-        }
-        .footer {
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 25px;
             margin-top: 30px;
-            padding-top: 20px;
-            border-top: 1px dashed #ccc;
-            font-size: 0.9em;
         }
-        ul {
-            padding-left: 20px;
+        .product-card {
+            background: white;
+            padding: 25px;
+            border-radius: 12px;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.05);
+            text-align: center;
+            border-top: 5px solid #4caf50;
+            transition: transform 0.3s;
+        }
+        .product-card:hover {
+            transform: translateY(-5px);
+        }
+        .product-card h3 {
+            color: #2e7d32;
+            margin-bottom: 15px;
+            font-size: 22px;
+        }
+        .product-list {
+            list-style-type: none;
+            padding: 0;
+            text-align: left;
+            display: inline-block;
+        }
+        .product-list li {
+            margin-bottom: 8px;
+            font-size: 16px;
+            border-bottom: 1px dashed #ccc;
+            padding-bottom: 5px;
+        }
+        .product-list li::before {
+            content: "🍄 ";
+        }
+        .list-bean li::before { content: "🧊 "; }
+        .list-sea li::before { content: "🌊 "; }
+
+        /* 聯絡我們與頁尾 */
+        #contact {
+            background-color: #333;
+            color: white;
+            text-align: center;
+            padding: 50px 20px;
+            max-width: 100%;
+        }
+        #contact h2 {
+            color: #ffd54f;
+            border-bottom-color: #4caf50;
+        }
+        .contact-info {
+            font-size: 18px;
+            margin: 20px 0;
+        }
+        .contact-info span {
+            display: block;
+            margin-bottom: 10px;
+        }
+        footer {
+            background-color: #222;
+            color: #888;
+            text-align: center;
+            padding: 15px 0;
+            font-size: 14px;
+        }
+
+        /* 手機版響應式調整 */
+        @media (max-width: 768px) {
+            #hero h1 { font-size: 32px; }
+            #hero p { font-size: 16px; }
+            header { flex-direction: column; padding: 10px; }
+            nav { margin-top: 10px; }
+            nav a { margin: 0 10px; font-size: 14px; }
         }
     </style>
 </head>
 <body>
 
-<div class="container">
-    <div class="header">
-        <h1>【新品上市】大海的綠寶石：海蘆筍</h1>
-        <p>—— 珍稀「海中人參」・天然鹽味與脆爽口感的極致饗宴 ——</p>
-    </div>
+    <!-- 頂部導覽列 -->
+    <header>
+        <div class="logo">茹媽鳳農六區</div>
+        <nav>
+            <a href="#hero">首頁</a>
+            <a href="#about">關於茹媽</a>
+            <a href="#products">嚴選商品</a>
+            <a href="#contact">聯絡我們</a>
+        </nav>
+    </header>
 
-    <div class="main-content">
-        <div>
-            <img src="https://en.pimg.jp/113/360/826/1/113360826.jpg" alt="海蘆筍" class="product-img">
+    <!-- 首頁橫幅 -->
+    <section id="hero">
+        <h1>產地直送：最懂你的健康好味</h1>
+        <p>來自鳳農六區，新鮮、透明、充滿人情味的在地嚴選食材</p>
+        <a href="#products" class="cta-btn">查看今日菜單</a>
+    </section>
+
+    <!-- 關於我們 -->
+    <section id="about">
+        <div class="section-title-wrapper">
+            <h2>關於茹媽</h2>
+        </div>
+        <p>
+            歡迎光臨！我是茹媽，很高興能與您相遇。我們位於充滿活力的「鳳農六區」，致力於成為您與在地農產之間最溫暖的橋樑。<br><br>
+            阿茹的承諾很簡單：為您挑選最新鮮的各式菇類、海鮮乾貨與每日鮮製豆製品。每一份送到您手中的食材，都像是我為自己家人親手挑選的一樣，品質嚴格把關，價格公道透明。
+        </p>
+    </section>
+
+    <!-- 嚴選商品 -->
+    <section id="products">
+        <div class="section-title-wrapper">
+            <h2>今日新鮮進貨清單</h2>
+        </div>
+        <div class="product-grid">
+            <!-- 菇類卡片 -->
+            <div class="product-card">
+                <h3>各式鮮嫩菇類</h3>
+                <ul class="product-list">
+                    <li>金針菇 / 香菇</li>
+                    <li>洋菇 / 草菇</li>
+                    <li>鮑魚菇 / 秀珍菇</li>
+                    <li>杏鮑菇 / 鴻喜菇</li>
+                    <li>美白菇 / 白精靈</li>
+                </ul>
+            </div>
             
-            <h2>✨ 三大核心功效</h2>
-            <div class="benefit-item">
-                <span class="icon">💎</span>
-                <div><strong>天然礦物庫：</strong>富含鈣、鎂、鐵、鋅等海洋微量元素，維持生理機能。</div>
+            <!-- 豆製品卡片 -->
+            <div class="product-card">
+                <h3>每日現做豆製品</h3>
+                <ul class="product-list list-bean">
+                    <li>毛豆干 / 香豆包</li>
+                    <li>大印干 / 干絲</li>
+                    <li>中華豆腐 / 百頁豆腐</li>
+                    <li>油豆腐 / 冷凍豆子</li>
+                    <li>麵腸</li>
+                </ul>
             </div>
-            <div class="benefit-item">
-                <span class="icon">🌱</span>
-                <div><strong>高纖低熱量：</strong>豐富膳食纖維，增加飽足感，健康輕盈無負擔。</div>
-            </div>
-            <div class="benefit-item">
-                <span class="icon">⚛️</span>
-                <div><strong>珍稀微量元素：</strong>特殊鹽生植物營養，幫助調整體質，增強體力。</div>
+
+            <!-- 海菜與乾貨卡片 -->
+            <div class="product-card">
+                <h3>精選海味與乾貨</h3>
+                <ul class="product-list list-sea">
+                    <li>海帶絲 / 海帶根</li>
+                    <li>海帶捲 / 海帶結</li>
+                    <li>海茸 / 細絲</li>
+                    <li>鳳尾草</li>
+                    <li>木耳 / 榨菜 / 栗子 / 蓮子</li>
+                </ul>
             </div>
         </div>
+    </section>
 
-        <div>
-            <h2>🌿 認識海蘆筍：大海的饋贈</h2>
-            <p>海蘆筍生長於純淨沿海灘塗，吸取海水精華成長。自帶天然鹽味與礦物質，口感清脆如嫩筍。在歐美與日本，它是頂級餐廳主廚最愛用的健康珍味。</p>
-
-            <div class="cooking-section">
-                <h2>🔍 究極烹調作法</h2>
-                <div class="tip-box">
-                    💡 重點提示：海蘆筍本身帶有天然鹹味，料理時「建議不額外加鹽」，更能品嚐原味！
-                </div>
-                <div class="recipe-grid">
-                    <div class="recipe-card">
-                        <strong>🍳 洋菇炒海蘆筍</strong>
-                        <p>洋菇拌炒近全熟,加入海蘆筍拌炒，加入小碗1/5鍋邊水，拌炒即可起鍋！</p>
-                    </div>
-                    <div class="recipe-card">
-                        <strong>🥗 日式涼拌沙拉</strong>
-                        <p>汆燙30秒後冰鎮，淋上胡麻醬或油醋，清爽解膩。</p>
-                    </div>
-                    <div class="recipe-card">
-                        <strong>🍲 海洋風味鮮湯</strong>
-                        <p>起鍋前加入海蘆筍，增添湯頭鮮甜與鮮綠視覺。</p>
-                    </div>
-                   
-                </div>
-            </div>
+    <!-- 聯絡我們 -->
+    <section id="contact">
+        <div class="section-title-wrapper">
+            <h2>聯絡茹媽</h2>
         </div>
-    </div>
-
-    <div class="footer">
-        <h2>📌 料理小祕訣 (Tips)</h2>
-        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
-            <ul>
-                <li>若口味較淡，烹調前先「汆燙20秒」可去除多餘鹹味。</li>
-                <li>海蘆筍不宜久煮，快炒或餘溫悶熟最能保持翠綠口感。</li>
-            </ul>
-            <ul>
-                <li>非常適合搭配干貝、蝦仁等海鮮食材一同料理。</li>
-                <li>冷藏保存建議於3-5天內食用完畢，以維持最佳鮮度。</li>
-            </ul>
+        <p>想要預留新鮮食材，或是有任何採購需求？隨時歡迎聯絡我們！</p>
+        <div class="contact-info">
+            <span>📍 攤位位置：鳳農市場六區 (茹媽)</span>
+            <span>📞 訂購專線：0970-660-371</span>
+            <span>💬 Facebook：茹媽鳳農六區 | Instagram：ahru_fungnong</span>
         </div>
-    </div>
-</div>
+    </section>
+
+    <!-- 頁尾 -->
+    <footer>
+        &copy; 2026 茹媽's 鳳農六區. All Rights Reserved.
+    </footer>
 
 </body>
 </html>
